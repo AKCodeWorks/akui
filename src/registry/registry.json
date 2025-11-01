@@ -6,10 +6,12 @@
     "dev-deps": [],
     "components": [
       {
-        "file": "accordion/accordion.svelte"
+        "file": "accordion/accordion.svelte",
+        "version": 0.00
       },
       {
-        "file": "accordion/accordion-dep.svelte"
+        "file": "accordion/accordion-dep.svelte",
+        "version": 0.00
       }
     ]
   }
