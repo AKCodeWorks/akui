@@ -1,4 +1,4 @@
-<!-- AKUI_VERSION: UNTRACKED DO NOT DELETE OR YOUR FILE MAY BE OVERWRITTEN ON UPDATE! -->
+<!-- AKUI_VERSION: 0 DO NOT DELETE OR YOUR FILE WILL BE OVERWRITTEN ON UPDATE! -->
 <script lang="ts">
 	let someDep = $state('I am an accordion');
 </script>

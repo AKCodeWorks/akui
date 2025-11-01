@@ -7,11 +7,11 @@
     "components": [
       {
         "file": "accordion/accordion.svelte",
-        "version": 0.00
+        "version": "0.00"
       },
       {
         "file": "accordion/accordion-dep.svelte",
-        "version": 0.00
+        "version": "0.00"
       }
     ]
   }
