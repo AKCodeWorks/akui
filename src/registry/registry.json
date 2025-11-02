@@ -41,7 +41,7 @@
         "version": "0.01"
       },
       {
-        "file": "code/code.utils.svelte",
+        "file": "code/code.utils.ts",
         "version": "0.01"
       },
       {
@@ -68,7 +68,7 @@
         "version": "0.01"
       },
       {
-        "file": "doc/doc.utils.svelte",
+        "file": "doc/doc.utils.ts",
         "version": "0.01"
       },
       {
