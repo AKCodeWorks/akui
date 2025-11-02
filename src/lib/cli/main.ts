@@ -2,12 +2,19 @@
 import { mkdirSync, writeFileSync, readFileSync, existsSync } from "fs";
 import path from "path";
 import { execSync } from "child_process";
-import { ask, detectPackageManager, extractAkuiVersion, getInstalledDeps, parseDepString, versionSatisfies } from "./utilities/index.js";
+import {
+  ask,
+  detectPackageManager,
+  extractAkuiVersion,
+  getInstalledDeps,
+  parseDepString,
+  versionSatisfies,
+  installRegistryDep
+} from "./utilities/index.js";
 import { injectAkuiComment } from "./utilities/inject-akui-comment.js";
 import { getAkuiConfig } from "./utilities/check-config.js";
 import { mergeConfig } from "./utilities/merge-config.js";
 import { defaultConfig, type AkuiConfig } from "./utilities/default-config.js";
-
 
 
 async function main(): Promise<void> {
@@ -17,27 +24,31 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 
-  const userConfig = await getAkuiConfig()
+  const userConfig = await getAkuiConfig();
 
-  let config: AkuiConfig
+  let config: AkuiConfig;
 
   if (!userConfig) {
-    const proceed = await ask(`\nAn invalid or missing akui.config file was detected. Would you like to proceed with the default configuration? (You can create a custom akui.config.js file later to override these settings.)`)
-    if (!proceed) throw new Error("Aborted due to missing akui.config file.")
-    config = defaultConfig
+    const proceed = await ask(
+      `\nAn invalid or missing akui.config file was detected. Would you like to proceed with the default configuration? (You can create a custom akui.config.js file later to override these settings.)`
+    );
+    if (!proceed) throw new Error("Aborted due to missing akui.config file.");
+    config = defaultConfig;
   } else {
-    config = await mergeConfig(defaultConfig, userConfig)
+    config = await mergeConfig(defaultConfig, userConfig);
   }
 
-  const { installDir, registryUrl, registryDir, registryComponentDir } = config
+  const { installDir, registryUrl, registryDir, registryComponentDir } = config;
 
-  const REGISTRY_URL = `${registryUrl}/${registryDir}`
+  const REGISTRY_URL = `${registryUrl}/${registryDir}`;
 
   console.log(`Fetching registry from: ${REGISTRY_URL}`);
 
   const res = await fetch(REGISTRY_URL);
   if (!res.ok) {
-    console.error("Failed to fetch registry file. Check your network connection and/or make sure your registry url is correct if using a custom config.");
+    console.error(
+      "Failed to fetch registry file. Check your network connection and/or make sure your registry url is correct if using a custom config."
+    );
     process.exit(1);
   }
 
@@ -46,6 +57,7 @@ async function main(): Promise<void> {
     {
       deps?: string[];
       "dev-deps"?: string[];
+      registryDeps?: string[];
       components: { file: string; version?: string }[];
     }
   >;
@@ -64,6 +76,15 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 
+  // --- registryDeps check (inserted section) ---
+  if (entry.registryDeps && entry.registryDeps.length) {
+    console.log("\nChecking registry dependencies...\n");
+    for (const depName of entry.registryDeps) {
+      await installRegistryDep(depName, registry, config);
+    }
+  }
+  // --------------------------------------------
+
   const targetDir = path.resolve(installDir, componentKey);
   mkdirSync(targetDir, { recursive: true });
 
@@ -71,7 +92,6 @@ async function main(): Promise<void> {
   const skipped: string[] = [];
 
   for (const c of entry.components) {
-
     const rawUrl = `${registryUrl}/${registryComponentDir}/${c.file}`;
     const fileName = path.basename(c.file);
     const dest = path.join(targetDir, fileName);
@@ -93,7 +113,9 @@ async function main(): Promise<void> {
       }
 
       if (localVersion === "UNTRACKED" || remoteVersion === "UNTRACKED") {
-        console.warn(`⚠ ${fileName} is UNTRACKED. It will be overwritten if confirmed.`);
+        console.warn(
+          `⚠ ${fileName} is UNTRACKED. It will be overwritten if confirmed.`
+        );
         overwrite = await ask(`Overwrite untracked file ${fileName}?`);
       } else {
         console.warn(

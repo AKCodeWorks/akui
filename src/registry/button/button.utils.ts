@@ -43,4 +43,25 @@ function handleClick(e: MouseEvent & { currentTarget: HTMLButtonElement }, props
   }
 }
 
-export { handleClick, getMouseClickButton };
+const buttonVariants = {
+  default: "",
+  destructive: "",
+  outline: "",
+  secondary: "",
+  ghost: "",
+}
+
+const buttonSizes = {
+  default: "h-10 py-2 px-4",
+  sm: "h-9 px-3 rounded-md",
+  lg: "h-11 px-8 rounded-md",
+  icon: "h-10 w-10",
+  "icon-sm": "h-9 w-9",
+  "icon-lg": "h-11 w-11",
+  "fit": "p-0 size-5",
+}
+
+type ButtonVariant = keyof typeof buttonVariants;
+type ButtonSize = keyof typeof buttonSizes;
+
+export { handleClick, getMouseClickButton, buttonVariants, buttonSizes, type ButtonVariant, type ButtonSize };

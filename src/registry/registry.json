@@ -4,6 +4,9 @@
       "bits-ui"
     ],
     "dev-deps": [],
+    "registryDeps": [
+      "ak"
+    ],
     "components": [
       {
         "file": "button/button.svelte",
@@ -32,6 +35,18 @@
       {
         "file": "remote-code/remote-code.svelte",
         "version": "0.01"
+      }
+    ]
+  },
+  "ak": {
+    "deps": [
+      "bits-ui"
+    ],
+    "dev-deps": [],
+    "components": [
+      {
+        "file": "utilities/ak.ts",
+        "version": "0.0.1"
       }
     ]
   }

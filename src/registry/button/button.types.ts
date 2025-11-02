@@ -1,5 +1,5 @@
 import type { Snippet } from "svelte"
-import type { HTMLButtonAttributes } from "svelte/elements"
+import type { ClassValue, HTMLButtonAttributes } from "svelte/elements"
 
 type AkUiMouseEvent = MouseEvent & { currentTarget: HTMLButtonElement }
 type ButtonProps = {
@@ -20,7 +20,8 @@ type ButtonProps = {
   onMetaRightClick?: (event: AkUiMouseEvent) => void
   onMetaMiddleClick?: (event: AkUiMouseEvent) => void
   onMetaLeftClick?: (event: AkUiMouseEvent) => void
-} & HTMLButtonAttributes
+  class?: ClassValue | null | undefined
+} & Omit<HTMLButtonAttributes, "class">
 
 const buttonTypes = ['left', 'middle', 'right'] as const;
 const metaKeys = ['shift', 'ctrl', 'alt', 'meta'] as const;
