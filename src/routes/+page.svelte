@@ -1,5 +1,5 @@
 <script lang="ts">
-	import DocExample from '$lib/components/examples/doc-example.svelte';
+	import Button from '$lib/components/ui/button/button.svelte';
 </script>
 
-<DocExample />
+<Button>Click Me!</Button>
