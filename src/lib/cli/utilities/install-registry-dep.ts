@@ -43,7 +43,7 @@ async function installRegistryDep(depName: string, registry: any, config: AkuiCo
   }
 
   console.log(`⬇ Installing registry dependency "${depName}"...`);
-  const args = [process.argv[0], process.argv[1], depName];
+  const args = [process.argv[1], depName];;
   const { spawnSync } = await import("child_process");
   const result = spawnSync(process.execPath, args, { stdio: "inherit" });
   if (result.error) console.error(`Failed to install registry dependency "${depName}"`, result.error);
