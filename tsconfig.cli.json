@@ -1,0 +1,15 @@
+{
+	"compilerOptions": {
+		"outDir": "dist/cli",
+		"rootDir": "src/lib/cli",
+		"noEmit": false,
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"target": "ES2022",
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"strict": true
+	},
+	"include": ["src/lib/cli"],
+	"exclude": ["src/**/*.svelte", "src/routes", "src/lib/components"]
+}

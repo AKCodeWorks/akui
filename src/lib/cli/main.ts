@@ -1,4 +1,4 @@
-// dirty but i'll sort out handling imorts and exports of uitlities when i actually publish the cli tool
+#!/usr/bin/env node
 import { mkdirSync, writeFileSync, readFileSync, existsSync } from "fs";
 import path from "path";
 import { execSync } from "child_process";
@@ -7,7 +7,6 @@ import readline from "readline";
 const BASE_URL =
   "https://raw.githubusercontent.com/AKCodeWorks/akui/refs/heads/main/src/registry";
 const REGISTRY_URL = `${BASE_URL}/registry.json`;
-
 
 function detectPackageManager(): "npm" | "pnpm" | "yarn" | "bun" {
   const cwd = process.cwd();
@@ -77,12 +76,9 @@ function injectAkuiComment(fileName: string, content: string, version: string): 
     fileName.endsWith(".svelte")
       ? `<!-- AKUI_VERSION: ${version} DO NOT DELETE OR YOUR FILE WILL BE OVERWRITTEN ON UPDATE! -->`
       : `// AKUI_VERSION: ${version} DO NOT DELETE OR YOUR FILE WILL BE OVERWRITTEN ON UPDATE!`;
-
   const cleaned = content.replace(/^\uFEFF/, "").trimStart();
   return `${header}\n${cleaned}`;
 }
-
-
 
 async function main(): Promise<void> {
   const componentKey = process.argv[2];
@@ -106,6 +102,13 @@ async function main(): Promise<void> {
       components: { file: string; version?: string }[];
     }
   >;
+
+  for (const [key, entry] of Object.entries(registry)) {
+    entry.components = entry.components.map((c) => ({
+      ...c,
+      version: c.version !== undefined ? String(c.version) : "UNTRACKED"
+    }));
+  }
 
   const entry = registry[componentKey];
   if (!entry) {
@@ -136,7 +139,7 @@ async function main(): Promise<void> {
 
       if (localVersion === remoteVersion) {
         console.log(`✔ ${fileName} is up to date (version ${localVersion}).`);
-        skipped.push(fileName);
+        skipped.push(`${fileName} (was already up to date)`);
         continue;
       }
 
@@ -151,8 +154,8 @@ async function main(): Promise<void> {
       }
 
       if (!overwrite) {
-        console.log(`✖ Skipped ${fileName}`);
-        skipped.push(fileName);
+        console.log(`✖ Skipped ${fileName} (user declined overwrite)`);
+        skipped.push(`${fileName} (user declined overwrite)`);
         continue;
       }
     }
@@ -161,6 +164,7 @@ async function main(): Promise<void> {
     const resp = await fetch(rawUrl);
     if (!resp.ok) {
       console.error(`Failed to fetch ${rawUrl}`);
+      skipped.push(`${fileName} (fetch failed)`);
       continue;
     }
 
@@ -173,7 +177,6 @@ async function main(): Promise<void> {
       `⬆ Wrote ${fileName}${remoteVersion ? ` (version ${remoteVersion})` : ""}`
     );
   }
-
 
   const pkgManager = detectPackageManager();
   const installed = getInstalledDeps();

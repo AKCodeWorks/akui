@@ -1,17 +1,25 @@
 {
-  "accordion": {
+  "button": {
     "deps": [
       "bits-ui"
     ],
     "dev-deps": [],
     "components": [
       {
-        "file": "accordion/accordion.svelte",
-        "version": "0.00"
+        "file": "button/button.svelte",
+        "version": "0.01"
       },
       {
-        "file": "accordion/accordion-dep.svelte",
-        "version": "0.00"
+        "file": "button/button.types.ts",
+        "version": "0.01"
+      },
+      {
+        "file": "button/button.utils.ts",
+        "version": "0.01"
+      },
+      {
+        "file": "button/index.ts",
+        "version": "0.01"
       }
     ]
   }
