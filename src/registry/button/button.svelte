@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { AkUiMouseEvent, ButtonProps } from './button.types.js';
+	import type { AkRegMouseEvent, ButtonProps } from './button.types.js';
 	import { mergeProps } from 'bits-ui';
 	import { handleClick } from './button.utils.js';
 	import { ak } from '../utilities/ak.js';
@@ -7,8 +7,8 @@
 	let { children, before, after, class: className, ...props }: ButtonProps = $props();
 
 	const merged = mergeProps(
-		{ onclick: (e: AkUiMouseEvent) => handleClick(e, props) },
-		{ onauxclick: (e: AkUiMouseEvent) => handleClick(e, props) }
+		{ onclick: (e: AkRegMouseEvent) => handleClick(e, props) },
+		{ onauxclick: (e: AkRegMouseEvent) => handleClick(e, props) }
 	);
 </script>
 

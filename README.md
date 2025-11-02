@@ -1,4 +1,4 @@
-# AKUI
+# AKREG
 
 ## An easy to use component registry
 

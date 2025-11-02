@@ -5,34 +5,36 @@ import { execSync } from "child_process";
 import {
   ask,
   detectPackageManager,
-  extractAkuiVersion,
+  extractAkRegVersion,
   getInstalledDeps,
   parseDepString,
   versionSatisfies,
-  installRegistryDep
+  installRegistryDep,
+  getAkRegConfig,
+  injectAkRegComment,
+
 } from "./utilities/index.js";
-import { injectAkuiComment } from "./utilities/inject-akui-comment.js";
-import { getAkuiConfig } from "./utilities/check-config.js";
+
 import { mergeConfig } from "./utilities/merge-config.js";
-import { defaultConfig, type AkuiConfig } from "./utilities/default-config.js";
+import { defaultConfig, type AkRegConfig, } from "./utilities/default-config.js";
 
 
 async function main(): Promise<void> {
   const componentKey = process.argv[2];
   if (!componentKey) {
-    console.error("No component key provided. Usage: akui <component-key>");
+    console.error("No component key provided. Usage: akreg <component-key>");
     process.exit(1);
   }
 
-  const userConfig = await getAkuiConfig();
+  const userConfig = await getAkRegConfig();
 
-  let config: AkuiConfig;
+  let config: AkRegConfig;
 
   if (!userConfig) {
     const proceed = await ask(
-      `\nAn invalid or missing akui.config file was detected. Would you like to proceed with the default configuration? (You can create a custom akui.config.js file later to override these settings.)`
+      `\nAn invalid or missing akreg.config file was detected. Would you like to proceed with the default configuration? (You can create a custom akreg.config.js file later to override these settings.)`
     );
-    if (!proceed) throw new Error("Aborted due to missing akui.config file.");
+    if (!proceed) throw new Error("Aborted due to missing akreg.config file.");
     config = defaultConfig;
   } else {
     config = await mergeConfig(defaultConfig, userConfig);
@@ -103,7 +105,7 @@ async function main(): Promise<void> {
 
     if (fileExists) {
       const existingContent = readFileSync(dest, "utf8");
-      const extracted = extractAkuiVersion(existingContent);
+      const extracted = extractAkRegVersion(existingContent);
       localVersion = extracted ?? "UNTRACKED";
 
       if (localVersion === remoteVersion) {
@@ -140,7 +142,7 @@ async function main(): Promise<void> {
     }
 
     let content = await resp.text();
-    content = injectAkuiComment(fileName, content, remoteVersion);
+    content = injectAkRegComment(fileName, content, remoteVersion);
 
     writeFileSync(dest, content, "utf8");
     updated.push(fileName);

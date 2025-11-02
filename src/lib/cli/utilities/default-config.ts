@@ -1,5 +1,5 @@
-/** The expected structure of an AKUI config file. */
-export interface AkuiConfig {
+/** The expected structure of an AKREG config file. */
+export interface AkRegConfig {
   registryUrl: string;
   registryDir: string;
   installDir: string;
@@ -7,11 +7,11 @@ export interface AkuiConfig {
 
 }
 
-const config: AkuiConfig = {
-  installDir: "src/lib/components/akui",
+const config: AkRegConfig = {
+  installDir: "src/lib/components/akreg",
   registryDir: "src/registry/registry.json",
   registryComponentDir: 'src/registry',
-  registryUrl: "https://raw.githubusercontent.com/AKCodeWorks/akui/refs/heads/main"
+  registryUrl: "https://raw.githubusercontent.com/AKCodeWorks/akreg/refs/heads/main"
 }
 
 const allowedKeys = Object.keys(config);

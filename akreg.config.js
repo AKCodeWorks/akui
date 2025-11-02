@@ -14,7 +14,7 @@ const config = {
 	/**
 	 * URL to registry repository
 	 */
-	registryUrl: 'https://raw.githubusercontent.com/AKCodeWorks/akui/refs/heads/main'
+	registryUrl: 'https://raw.githubusercontent.com/AKCodeWorks/akreg/refs/heads/main'
 };
 
 export default config;

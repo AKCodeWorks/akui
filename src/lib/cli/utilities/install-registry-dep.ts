@@ -1,11 +1,11 @@
 import { existsSync, readFileSync } from "fs";
 import path from "path";
 import { ask } from "./ask.js";
-import type { AkuiConfig } from "./default-config.js";
-import { extractAkuiVersion } from "./extract-akui-version.js";
+import type { AkRegConfig } from "./default-config.js";
+import { extractAkRegVersion } from "./extract-akreg-version.js";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function installRegistryDep(depName: string, registry: any, config: AkuiConfig) {
+async function installRegistryDep(depName: string, registry: any, config: AkRegConfig) {
   const entry = registry[depName];
   if (!entry) {
     console.warn(`⚠ Registry dependency "${depName}" not found in registry.`);
@@ -24,7 +24,7 @@ async function installRegistryDep(depName: string, registry: any, config: AkuiCo
     needsInstall = true;
   } else {
     const existingContent = readFileSync(dest, "utf8");
-    const extracted = extractAkuiVersion(existingContent);
+    const extracted = extractAkRegVersion(existingContent);
     localVersion = extracted ?? "UNTRACKED";
     needsInstall = localVersion !== remoteVersion;
   }

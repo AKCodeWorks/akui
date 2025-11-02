@@ -1,8 +1,8 @@
-import type { AkuiConfig } from "./default-config.js";
+import type { AkRegConfig } from "./default-config.js";
 import { allowedKeys } from "./default-config.js";
 import { ask } from "./ask.js";
 
-async function mergeConfig(defaults: AkuiConfig, custom: AkuiConfig): Promise<AkuiConfig> {
+async function mergeConfig(defaults: AkRegConfig, custom: AkRegConfig): Promise<AkRegConfig> {
   const invalidKeys = Object.keys(custom).filter((k) => !allowedKeys.includes(k));
   if (invalidKeys.length > 0) {
     console.info(`The following keys in the custom config are not recognized and can be removed from your config: ${invalidKeys.join(", ")}`);

@@ -1,20 +1,20 @@
-import type { AkuiConfig } from "./default-config.js";
+import type { AkRegConfig } from "./default-config.js";
 import path from "path";
 import fs from "fs";
-import { isAkuiConfig } from "./is-akui-config.js";
+import { isAkRegConfig } from "./is-akreg-config.js";
 
 
 
 /**
- * Attempts to load `akui.config.js` or `akui.config.js` from the current working directory.
+ * Attempts to load akreg.config.js`` from the current working directory.
  * Returns the config object if valid, otherwise null.
  */
-export async function getAkuiConfig(): Promise<AkuiConfig | null> {
+export async function getAkRegConfig(): Promise<AkRegConfig | null> {
   const cwd = process.cwd();
 
   // making this an array so add more files types later if needed....
   const possibleFiles = [
-    path.join(cwd, "akui.config.js")
+    path.join(cwd, "akreg.config.js")
   ];
 
   const configPath = possibleFiles.find((p) => fs.existsSync(p));
@@ -24,14 +24,14 @@ export async function getAkuiConfig(): Promise<AkuiConfig | null> {
     const mod = await import(pathToFileUrl(configPath).href);
     const config = mod.default ?? mod.config ?? mod;
 
-    if (!isAkuiConfig(config)) {
+    if (!isAkRegConfig(config)) {
       // don't care too much about why, just return null
       return null;
     }
 
     return config;
   } catch (err) {
-    console.error("⚠ Failed to load akui.config:", err);
+    console.error("⚠ Failed to load akreg.config:", err);
     return null;
   }
 }
