@@ -52,11 +52,11 @@
   },
   "doc": {
     "deps": [
-      "bits-ui",
-      "ak"
+      "bits-ui"
     ],
     "registryDeps": [
-      "code"
+      "code",
+      "ak"
     ],
     "components": [
       {
